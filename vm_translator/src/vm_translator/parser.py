@@ -3,19 +3,19 @@ from vm_command_type import VMCommandKind
 
 class Parser:
     def __init__(self) -> None:
-        pass
+        raise NotImplementedError
 
     def has_more_commands(self) -> bool:
-        pass
+        raise NotImplementedError
 
     def advance(self) -> None:
-        pass
+        raise NotImplementedError
 
     def command_type(self) -> VMCommandKind:
-        pass
+        raise NotImplementedError
 
     def arg1(self) -> str:
-        pass
+        raise NotImplementedError
 
     def arg2(self) -> int:
-        pass
+        raise NotImplementedError
