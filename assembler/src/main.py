@@ -6,7 +6,6 @@ from asm_encode import Code
 from symbol_table import SymbolTable
 
 if __name__ == "__main__":
-    # p = Path('/Users/masaki/Develop/learn/nand_to_tetris/assembler/test/inputs/plain_1.txt')
     arg_parser = argparse.ArgumentParser(prog="Assembler")
     arg_parser.add_argument("-t")
     args = arg_parser.parse_args()
@@ -15,7 +14,8 @@ if __name__ == "__main__":
     parser = Parser(input_path)
     code = Code()
 
-    # creating intermediate file (exclude blank line and spaces)
+    # creat intermediate file 
+    # exclude blank line and spaces, and update symbol table
     symbol_table = SymbolTable()
     mid_path = input_path.parents[1] / "mid" / input_path.with_suffix(".txt").name
     mid_path.parent.mkdir(parents=True, exist_ok=True)
@@ -40,6 +40,8 @@ if __name__ == "__main__":
                     pass
             parser.advance()
 
+    # creat output file
+    # replace all asm to bits
     parser = Parser(mid_path)
     out_path = input_path.parents[1] / "outputs" / input_path.with_suffix(".txt").name
     out_path.parent.mkdir(parents=True, exist_ok=True)
