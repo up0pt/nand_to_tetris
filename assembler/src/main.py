@@ -8,7 +8,7 @@ from symbol_table import SymbolTable
 if __name__ == "__main__":
     # p = Path('/Users/masaki/Develop/learn/nand_to_tetris/assembler/test/inputs/plain_1.txt')
     arg_parser = argparse.ArgumentParser(prog="Assembler")
-    arg_parser.add_argument('-t')
+    arg_parser.add_argument("-t")
     args = arg_parser.parse_args()
     input_path = Path(args.t)
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
                     try:
                         address = int(symbol)
                     except ValueError:
-                        symbol_table.add_Entry(symbol, ROM_line_counter) 
+                        symbol_table.add_Entry(symbol, ROM_line_counter)
                 case _:
                     pass
             parser.advance()
@@ -59,7 +59,13 @@ if __name__ == "__main__":
                             address = symbol_table.getAddress(symbol)
                     f.write("0" + f"{address:015b}" + "\n")
                 case "C_COMMAND":
-                    f.write('111' + str(code.comp(parser.comp())) + str(code.dest(parser.dest())) + str(code.jump(parser.jump())) + "\n")
+                    f.write(
+                        "111"
+                        + str(code.comp(parser.comp()))
+                        + str(code.dest(parser.dest()))
+                        + str(code.jump(parser.jump()))
+                        + "\n"
+                    )
                 case "L_COMMAND":
                     pass
                 case _:

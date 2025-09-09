@@ -23,5 +23,5 @@ PREDEFINED_SYMBOL_DICT: dict[str, int] = {
     "R14": 14,
     "R15": 15,
     "SCREEN": 16384,
-    "KBD":24576,
+    "KBD": 24576,
 }
