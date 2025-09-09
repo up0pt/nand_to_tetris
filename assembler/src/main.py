@@ -7,7 +7,7 @@ from symbol_table import SymbolTable
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(prog="Assembler")
-    arg_parser.add_argument("-t")
+    arg_parser.add_argument("-t", type=str, help="path to the input assembly file")
     args = arg_parser.parse_args()
     input_path = Path(args.t)
 
