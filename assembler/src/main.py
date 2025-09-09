@@ -1,9 +1,9 @@
 import argparse
 from pathlib import Path
 
-from Parser import Parser
-from Code import Code
-from SymbolTable import SymbolTable
+from parser import Parser
+from asm_encode import Code
+from symbol_table import SymbolTable
 
 if __name__ == "__main__":
     # p = Path('/Users/masaki/Develop/learn/nand_to_tetris/assembler/test/inputs/plain_1.txt')
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     parser = Parser(input_path)
     code = Code()
 
-    # 中間ファイルの生成
+    # creating intermediate file (exclude blank line and spaces)
     symbol_table = SymbolTable()
     mid_path = input_path.parents[1] / "mid" / input_path.with_suffix(".txt").name
     mid_path.parent.mkdir(parents=True, exist_ok=True)

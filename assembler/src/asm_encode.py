@@ -1,4 +1,4 @@
-from Binary import Bit3, Bit7
+from bit_classes import Bit3, Bit7
 
 class Code():
     def __init__(self):

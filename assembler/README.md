@@ -11,6 +11,6 @@ source .venv/bin/activate
 
 ## 3. run Assembler
 ```bash
-python main.py -t test/inputs/Add.asm
+python src/main.py -t test/inputs/Rect.asm
 ```
 the intermediate file is stored in test/mid, the output file is stored in test/outputs.
