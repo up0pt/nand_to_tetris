@@ -1,7 +1,7 @@
 from pathlib import Path
 import re
 
-from command_type import A_COMMAND, C_COMMAND, L_COMMAND, CommandKind
+from command_type import CommandKind
 
 COMMENT_SEP = "//"
 
@@ -28,11 +28,11 @@ class Parser:
             return None
         match clean_command[0]:
             case "@":
-                return A_COMMAND
+                return CommandKind.A_COMMAND
             case "(":
-                return L_COMMAND
+                return CommandKind.L_COMMAND
             case _:
-                return C_COMMAND
+                return CommandKind.C_COMMAND
 
     def symbol(self) -> str:
         clean_command = self.get_latest_clean_command()

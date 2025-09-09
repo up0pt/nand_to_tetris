@@ -1,7 +1,7 @@
-from typing import Final, Literal
+from enum import StrEnum, auto
 
-A_COMMAND: Final = "A_COMMAND"
-C_COMMAND: Final = "C_COMMAND"
-L_COMMAND: Final = "L_COMMAND"
 
-type CommandKind = Literal["A_COMMAND", "C_COMMAND", "L_COMMAND"]
+class CommandKind(StrEnum):
+    A_COMMAND = auto()
+    C_COMMAND = auto()
+    L_COMMAND = auto()
