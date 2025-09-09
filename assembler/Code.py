@@ -1,0 +1,106 @@
+from Binary import Bit3, Bit7
+
+class Code():
+    def __init__(self):
+        return None
+    def dest(self, txt: str) -> Bit3:
+        match txt:
+            case "null":
+                return Bit3((0,0,0))
+            case "M":
+                return Bit3((0,0,1))
+            case "D":
+                return Bit3((0,1,0))
+            case "MD":
+                return Bit3((0,1,1))
+            case "A":
+                return Bit3((1,0,0))
+            case "AM":
+                return Bit3((1,0,1))
+            case "AD":
+                return Bit3((1,1,0))
+            case "AMD":
+                return Bit3((1,1,1))
+            case _:
+                raise ValueError(f"Code dest function's input was {txt}. Out of case.")
+    def comp(self, txt: str) -> Bit7:
+        match txt:
+            case "0":
+                return Bit7((0,1,0,1,0,1,0))
+            case "1":
+                return Bit7((0,1,1,1,1,1,1))
+            case "-1":
+                return Bit7((0,1,1,1,0,1,0))
+            case "D":
+                return Bit7((0,0,0,1,1,0,0))
+            case "A":
+                return Bit7((0,1,1,0,0,0,0))
+            case "!D":
+                return Bit7((0,0,0,1,1,0,1))
+            case "!A":
+                return Bit7((0,1,1,0,0,0,1))
+            case "-D":
+                return Bit7((0,0,0,1,1,1,1))
+            case "-A":
+                return Bit7((0,1,1,0,0,1,1))
+            case "D+1":
+                return Bit7((0,0,1,1,1,1,1))
+            case "A+1":
+                return Bit7((0,1,1,0,1,1,1))
+            case "D-1":
+                return Bit7((0,0,0,1,1,1,0))
+            case "A-1":
+                return Bit7((0,1,1,0,0,1,0))
+            case "D+A":
+                return Bit7((0,0,0,0,0,1,0))
+            case "D-A":
+                return Bit7((0,0,1,0,0,1,1))
+            case "A-D":
+                return Bit7((0,0,0,0,1,1,1))
+            case "D&A":
+                return Bit7((0,0,0,0,0,0,0))
+            case "D|A":
+                return Bit7((0,0,1,0,1,0,1))
+            case "M":
+                return Bit7((1,1,1,0,0,0,0))
+            case "!M":
+                return Bit7((1,1,1,0,0,0,1))
+            case "-M":
+                return Bit7((1,1,1,0,0,1,1))
+            case "M+1":
+                return Bit7((1,1,1,0,1,1,1))
+            case "M-1":
+                return Bit7((1,1,1,0,0,1,0))
+            case "D+M":
+                return Bit7((1,0,0,0,0,1,0))
+            case "D-M":
+                return Bit7((1,0,1,0,0,1,1))
+            case "M-D":
+                return Bit7((1,0,0,0,1,1,1))
+            case "D&M":
+                return Bit7((1,0,0,0,0,0,0))
+            case "D|M":
+                return Bit7((1,0,1,0,1,0,1))
+            case _:
+                raise ValueError(f"Code comp function's input was {txt}. Out of case.") 
+            
+    def jump(self, txt: str) -> Bit3:
+        match txt:
+            case "null":
+                return Bit3((0,0,0))
+            case "JGT":
+                return Bit3((0,0,1))
+            case "JEQ":
+                return Bit3((0,1,0))
+            case "JGE":
+                return Bit3((0,1,1))
+            case "JLT":
+                return Bit3((1,0,0))
+            case "JNE":
+                return Bit3((1,0,1))
+            case "JLE":
+                return Bit3((1,1,0))
+            case "JMP":
+                return Bit3((1,1,1))
+            case _:
+                raise ValueError(f"Code jump function's input was {txt}. Out of case. {txt == "JGT"}")
