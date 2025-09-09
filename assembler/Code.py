@@ -103,4 +103,4 @@ class Code():
             case "JMP":
                 return Bit3((1,1,1))
             case _:
-                raise ValueError(f"Code jump function's input was {txt}. Out of case. {txt == "JGT"}")
+                raise ValueError(f"Code jump function's input was {txt}. Out of case.")
