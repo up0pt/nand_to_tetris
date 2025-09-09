@@ -22,10 +22,10 @@ class Parser:
         clean_command = re.sub(r"\s+", "", command.split(COMMENT_SEP, 1)[0])
         return clean_command
 
-    def commandType(self) -> CommandKind | None:
+    def commandType(self) -> CommandKind:
         clean_command = self.get_latest_clean_command()
         if clean_command == "":
-            return None
+            return CommandKind.BLANK_COMMAND
         match clean_command[0]:
             case "@":
                 return CommandKind.A_COMMAND
@@ -64,10 +64,12 @@ class Parser:
                 return "0"
             else:
                 raise ValueError(
-                    "The computation before jump instruction must be either D or 0."
+                    f"The computation before jump instruction must be either D or 0.: {clean_command}"
                 )
         else:
-            raise ValueError("The computation command must have = or ; expression.")
+            raise ValueError(
+                f"The computation command must have = or ; expression. :{clean_command}"
+            )
 
     def jump(self) -> str:
         command = self.dirty_commands[0]

@@ -5,3 +5,4 @@ class CommandKind(StrEnum):
     A_COMMAND = auto()
     C_COMMAND = auto()
     L_COMMAND = auto()
+    BLANK_COMMAND = auto()

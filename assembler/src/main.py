@@ -34,10 +34,8 @@ if __name__ == "__main__":
                         address = int(symbol)
                     except ValueError:
                         symbol_table.add_Entry(symbol, ROM_line_counter)
-                case _:
-                    raise ValueError(
-                        f"encounterd an unexpected command type: {command_type}"
-                    )
+                case CommandKind.BLANK_COMMAND:
+                    pass
             parser.advance()
 
     # creat output file
