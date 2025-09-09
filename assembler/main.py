@@ -25,14 +25,6 @@ if __name__ == "__main__":
             command_type = parser.commandType()
             match command_type:
                 case "A_COMMAND":
-                    symbol = parser.symbol()
-                    try:
-                        address = int(symbol)
-                    except ValueError:
-                        if not symbol_table.contains(symbol):
-                            address = symbol_table.get_incr_new_address()
-                            symbol_table.add_Entry(symbol, address)
-                    
                     f.write(f"{parser.get_latest_clean_command()}\n")
                     ROM_line_counter += 1
                 case "C_COMMAND":
@@ -43,7 +35,7 @@ if __name__ == "__main__":
                     try:
                         address = int(symbol)
                     except ValueError:
-                        symbol_table.add_Entry(symbol, ROM_line_counter) # @Xxxが初出でも、(Xxx)があれば、シンボルテーブルのアドレスを上書きする。
+                        symbol_table.add_Entry(symbol, ROM_line_counter) 
                 case _:
                     pass
             parser.advance()
@@ -60,10 +52,11 @@ if __name__ == "__main__":
                     try:
                         address = int(symbol)
                     except ValueError:
-                        if symbol_table.contains(symbol):
-                            address = symbol_table.getAddress(symbol)
+                        if not symbol_table.contains(symbol):
+                            address = symbol_table.get_incr_new_address()
+                            symbol_table.add_Entry(symbol, address)
                         else:
-                            raise ValueError()
+                            address = symbol_table.getAddress(symbol)
                     f.write("0" + f"{address:015b}" + "\n")
                 case "C_COMMAND":
                     f.write('111' + str(code.comp(parser.comp())) + str(code.dest(parser.dest())) + str(code.jump(parser.jump())) + "\n")
