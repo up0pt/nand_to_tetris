@@ -1,4 +1,4 @@
-from vm_command_type import VMCommandKind
+from vm_translator.vm_command_type import VMCommandKind
 
 
 class Parser:
