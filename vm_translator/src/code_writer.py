@@ -1,8 +1,6 @@
 from pathlib import Path
 
-from vm_command_type import VMCommandKind
-from segment import Segment
-
+from commands import CommandKind
 
 class CodeWriter:
     def __init__(self, path: Path) -> None:

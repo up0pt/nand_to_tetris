@@ -1,18 +1,14 @@
 from pathlib import Path
 from typing import Union
 
-from vm_translator.commands.arithmetic_command_type import (
+from commands.arithmetic_command_type import (
     ArithmeticCommands,
     ARITH_VALUES,
 )
-from vm_translator.commands.memory_access_command_type import Segment, Push, Pop
-from vm_translator.commands.program_flow_command_type import Label, Goto, If
-from vm_translator.commands.function_call_command_type import Function, Call, Return
-
-CommandKind = Union[
-    ArithmeticCommands, Push, Pop, Label, Goto, If, Function, Call, Return
-]
-
+from commands.memory_access_command_type import Segment, Push, Pop
+from commands.program_flow_command_type import Label, Goto, If
+from commands.function_call_command_type import Function, Call, Return
+from commands.command_kind import CommandKind
 
 class Parser:
     def __init__(self, path_str: str) -> None:
@@ -22,7 +18,7 @@ class Parser:
 
     def has_more_commands(self) -> bool:
         """
-        本当はここでadvanceの終了かどうかを確かめるためにcommandを読む必要がある．
+        ここでadvanceの終了かどうかを確かめるためにcommandを読む必要がある．
 
         :param self: 説明
         :return: 説明
