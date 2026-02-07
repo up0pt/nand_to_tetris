@@ -1,12 +1,18 @@
 from pathlib import Path
 from typing import Union
 
-from vm_translator.commands.arithmetic_command_type import ArithmeticCommands, ARITH_VALUES
+from vm_translator.commands.arithmetic_command_type import (
+    ArithmeticCommands,
+    ARITH_VALUES,
+)
 from vm_translator.commands.memory_access_command_type import Segment, Push, Pop
 from vm_translator.commands.program_flow_command_type import Label, Goto, If
 from vm_translator.commands.function_call_command_type import Function, Call, Return
 
-CommandKind = Union[ArithmeticCommands, Push, Pop, Label, Goto, If, Function, Call, Return]
+CommandKind = Union[
+    ArithmeticCommands, Push, Pop, Label, Goto, If, Function, Call, Return
+]
+
 
 class Parser:
     def __init__(self, path_str: str) -> None:
@@ -17,7 +23,7 @@ class Parser:
     def has_more_commands(self) -> bool:
         """
         本当はここでadvanceの終了かどうかを確かめるためにcommandを読む必要がある．
-        
+
         :param self: 説明
         :return: 説明
         :rtype: bool
@@ -33,14 +39,16 @@ class Parser:
 
     def command_type(self) -> CommandKind | None:
         return self.now_command
-    
+
     @staticmethod
     def _remove_comment_from_line(raw_command_line: str) -> str:
         return raw_command_line.split("//", 1)[0].strip()
 
     @staticmethod
     def _segmentation(raw_command_line: str) -> CommandKind:
-        splited_raw_command_line: list[str] = Parser._remove_comment_from_line(raw_command_line).split()
+        splited_raw_command_line: list[str] = Parser._remove_comment_from_line(
+            raw_command_line
+        ).split()
 
         match splited_raw_command_line:
             case [arith_op] if arith_op in ARITH_VALUES:
@@ -50,7 +58,7 @@ class Parser:
             case [Pop.op_str, seg, index]:
                 return Pop(seg=Segment(seg), index=int(index))
             case [Label.op_str, symbol]:
-                return Label(symbol = symbol)
+                return Label(symbol=symbol)
             case [Goto.op_str, symbol]:
                 return Goto(symbol=symbol)
             case [If.op_str, symbol]:
@@ -62,5 +70,6 @@ class Parser:
             case [Return.op_str]:
                 return Return()
             case _:
-                raise RuntimeError(f"Detected a command {raw_command_line} which doesn't align VM command rules")
-            
+                raise RuntimeError(
+                    f"Detected a command {raw_command_line} which doesn't align VM command rules"
+                )

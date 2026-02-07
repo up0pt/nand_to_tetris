@@ -1,10 +1,7 @@
 from pathlib import Path
-from typing import Literal
 
-from vm_translator.vm_command_type import VMCommandKind
-from vm_translator.segment import Segment
-
-type PushOrPop = Literal[VMCommandKind.C_PUSH, VMCommandKind.C_POP]
+from vm_command_type import VMCommandKind
+from segment import Segment
 
 
 class CodeWriter:
