@@ -2,6 +2,7 @@ from dataclasses import dataclass, field, InitVar
 from enum import Enum, auto, unique
 from typing import ClassVar
 from command_kind import VmCmd
+from assembler.src.predefined_symbols import (generic_Register1, generic_Register2, generic_Register3)
 
 
 @unique
@@ -32,7 +33,7 @@ class Push(VmCmd):
         object.__setattr__(self, "segment", Segment(self.raw_segment))
         object.__setattr__(self, "index", Segment(self.raw_index))
 
-    def asm_lines(self, label_id: str) -> str:
+    def asm_lines(self, label_id: str, file_name: str) -> str:
         match self.segment:
             case Segment.ARGUMENT:
                 return f"""
@@ -66,11 +67,7 @@ class Push(VmCmd):
                 """
             case Segment.STATIC:
                 return f"""
-                @16
-                D=A
-                @{self.index}
-                D=D+A
-                A=D
+                @{file_name}.{self.index}
                 D=M
                 @SP
                 A=M
@@ -181,8 +178,6 @@ class Pop(VmCmd):
     def asm_lines(self, label_id: str) -> str:
         match self.segment:
             case Segment.ARGUMENT:
-                generic_Register1 = 13
-                generic_Register2 = 14
                 return f"""
                 @SP
                 AM=M-1
@@ -202,3 +197,24 @@ class Pop(VmCmd):
                 A=M
                 M=D
                 """
+            case Segment.LOCAL:
+                return f"""
+                @SP
+                AM=M-1
+                D=M
+                M=0
+                @{generic_Register1}
+                M=D
+                @LCL
+                D=M
+                @{self.index}
+                D=D+A
+                @{generic_Register2}
+                M=D
+                @{generic_Register1}
+                D=M
+                @{generic_Register2}
+                A=M
+                M=D
+                """
+            case Segment.STATIC:
