@@ -187,6 +187,7 @@ class Pop(VmCmd):
                 @SP
                 AM=M-1
                 D=M
+                M=0
                 @{generic_Register1}
                 M=D
                 @ARG
