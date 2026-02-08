@@ -7,13 +7,13 @@ from vm_translator.src.commands.arithmetic import (
 from vm_translator.src.commands.memory_access import Segment, Push, Pop
 from vm_translator.src.commands.program_flow import Label, Goto, If
 from vm_translator.src.commands.function_call import Function, Call, Return
-from commands.command_kind import Command
+from commands.command_kind import VmCmd
 
 class Parser:
     def __init__(self, path_str: str) -> None:
         self.path = Path(path_str)
         self.piled_commands: list[str] = self.path.read_text(encoding="utf-8").splitlines()
-        self.now_command: Command | None = None
+        self.now_command: VmCmd | None = None
 
     def has_more_commands(self) -> bool:
         """
@@ -32,7 +32,7 @@ class Parser:
             raise RuntimeError("Parser.advance() called with no remaining commands")
         self.now_command = self._segmentation(self.piled_commands.pop(0))
 
-    def command_type(self) -> Command | None:
+    def command_type(self) -> VmCmd | None:
         return self.now_command
 
     @staticmethod
@@ -40,7 +40,7 @@ class Parser:
         return raw_command_line.split("//", 1)[0].strip()
 
     @staticmethod
-    def _segmentation(raw_command_line: str) -> Command:
+    def _segmentation(raw_command_line: str) -> VmCmd:
         splited_raw_command_line: list[str] = Parser._remove_comment_from_line(
             raw_command_line
         ).split()
