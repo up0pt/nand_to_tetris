@@ -182,14 +182,22 @@ class Pop(VmCmd):
         match self.segment:
             case Segment.ARGUMENT:
                 generic_Register1 = 13
+                generic_Register2 = 14
                 return f"""
-                @ARG
-                D=M
-                @{self.index}
-                D=D+A
                 @SP
                 AM=M-1
                 D=M
                 @{generic_Register1}
+                M=D
+                @ARG
+                D=M
+                @{self.index}
+                D=D+A
+                @{generic_Register2}
+                M=D
+                @{generic_Register1}
+                D=M
+                @{generic_Register2}
+                A=M
                 M=D
                 """
