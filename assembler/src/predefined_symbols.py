@@ -25,3 +25,9 @@ PREDEFINED_SYMBOL_DICT: dict[str, int] = {
     "SCREEN": 16384,
     "KBD": 24576,
 }
+
+# for vm_translator
+
+generic_Register1 = 13
+generic_Register2 = 14
+generic_Register3 = 15
