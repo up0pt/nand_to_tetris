@@ -1,9 +1,9 @@
 from pathlib import Path
 
-from commands.arithmetic_command_type import ArithmeticCommands
-from commands.memory_access_command_type import Push, Pop
-from commands.program_flow_command_type import Label, Goto, If
-from commands.function_call_command_type import Function, Call, Return
+from vm_translator.src.commands.arithmetic import ArithmeticCommands
+from vm_translator.src.commands.memory_access import Push, Pop
+from vm_translator.src.commands.program_flow import Label, Goto, If
+from vm_translator.src.commands.function_call import Function, Call, Return
 from commands.command_kind import CommandKind
 
 class CodeWriter:

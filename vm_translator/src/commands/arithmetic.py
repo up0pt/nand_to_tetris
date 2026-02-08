@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from command_kind import VmCmd
 
 @dataclass(frozen=True)
-class Add:
+class Add(VmCmd):
     vm_op: str = "add"
     vm_args: list[str] = []
     def asm_lines(self):

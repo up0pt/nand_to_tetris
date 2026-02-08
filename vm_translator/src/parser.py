@@ -1,12 +1,12 @@
 from pathlib import Path
 from typing import Union
 
-from commands.arithmetic_command_type import (
+from vm_translator.src.commands.arithmetic import (
     Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
 )
-from commands.memory_access_command_type import Segment, Push, Pop
-from commands.program_flow_command_type import Label, Goto, If
-from commands.function_call_command_type import Function, Call, Return
+from vm_translator.src.commands.memory_access import Segment, Push, Pop
+from vm_translator.src.commands.program_flow import Label, Goto, If
+from vm_translator.src.commands.function_call import Function, Call, Return
 from commands.command_kind import Command
 
 class Parser:
