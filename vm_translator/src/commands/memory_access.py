@@ -17,7 +17,7 @@ class Segment(Enum):
     THIS = auto()
     THAT = auto()
     POINTER = auto()
-    TMEP = auto()
+    TEMP = auto()
 
 
 @dataclass(frozen=True)
@@ -118,20 +118,9 @@ class Push(VmCmd):
                 D=0
                 """
             case Segment.POINTER:
-                if self.index == 0:
-                    return """
-                    @THIS
-                    D=M
-                    @SP
-                    A=M
-                    M=D
-                    @SP
-                    M=M+1
-                    D=0
-                    """
-                elif self.index == 1:
-                    return """
-                    @THAT
+                if self.index in [0, 1]:
+                    return f"""
+                    @{3 + self.index}
                     D=M
                     @SP
                     A=M
@@ -141,8 +130,8 @@ class Push(VmCmd):
                     D=0
                     """
                 else:
-                    raise ValueError(f"push pointer x: x is 0(THIS) or 1(THAT): given {self.index}")
-            case Segment.TMEP:
+                    raise ValueError(f"push pointer x: x should be 0(THIS) or 1(THAT), but given {self.index}")
+            case Segment.TEMP:
                 return f"""
                 @5
                 D=A
@@ -175,7 +164,7 @@ class Pop(VmCmd):
         object.__setattr__(self, "segment", Segment(self.raw_segment))
         object.__setattr__(self, "index", Segment(self.raw_index))
 
-    def asm_lines(self, label_id: str) -> str:
+    def asm_lines(self, label_id: str, file_name: str) -> str:
         match self.segment:
             case Segment.ARGUMENT:
                 return f"""
@@ -218,3 +207,79 @@ class Pop(VmCmd):
                 M=D
                 """
             case Segment.STATIC:
+                return f"""
+                @SP
+                AM=M-1
+                D=M
+                M=0
+                @{file_name}.{self.index}
+                M=D
+                """
+            case Segment.CONSTANT:
+                raise NotImplementedError
+            case Segment.THIS:
+                return f"""
+                @SP
+                AM=M-1
+                D=M
+                M=0
+                @{generic_Register1}
+                M=D
+                @THIS
+                D=M
+                @{self.index}
+                D=D+A
+                @{generic_Register2}
+                M=D
+                @{generic_Register1}
+                D=M
+                @{generic_Register2}
+                A=M
+                M=D
+                """
+            case Segment.THAT:
+                return f"""
+                @SP
+                AM=M-1
+                D=M
+                M=0
+                @{generic_Register1}
+                M=D
+                @THAT
+                D=M
+                @{self.index}
+                D=D+A
+                @{generic_Register2}
+                M=D
+                @{generic_Register1}
+                D=M
+                @{generic_Register2}
+                A=M
+                M=D
+                """
+            case Segment.POINTER:
+                if self.index in [0,1]:
+                    return f"""
+                    @SP
+                    AM=M-1
+                    D=M
+                    M=0
+                    @{3+self.index}
+                    M=D
+                    """
+                else:
+                    raise ValueError(f"pop pointer x: x should be 0(THIS) or 1(THAT), but given {self.index}")
+            case Segment.TEMP:
+                if self.index in [x for x in range(8)]:
+                    return f"""
+                    @SP
+                    AM=M-1
+                    D=M
+                    M=0
+                    @{5+self.index}
+                    M=D
+                    """
+                else:
+                    raise ValueError(f"pop temp x: x should be 0..7, but given {self.index}")
+            case _:
+                raise NotImplementedError
