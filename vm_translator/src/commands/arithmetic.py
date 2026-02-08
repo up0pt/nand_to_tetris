@@ -1,11 +1,11 @@
 from dataclasses import dataclass
+from typing import ClassVar
 from command_kind import VmCmd
 
 @dataclass(frozen=True)
 class Add(VmCmd):
-    vm_op: str = "add"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "add"
+    def asm_lines(self, label_id: str, *_):
         return """
         @SP
         AM=M-1
@@ -19,9 +19,8 @@ class Add(VmCmd):
 
 @dataclass(frozen=True)
 class Sub:
-    vm_op: str = "sub"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "sub"
+    def asm_lines(self, label_id: str, *_):
         return """
         @SP
         AM=M-1
@@ -35,9 +34,8 @@ class Sub:
     
 @dataclass(frozen=True)
 class Neg:
-    vm_op: str = "neg"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "neg"
+    def asm_lines(self, label_id: str, *_):
         return """
         @SP
         A=M-1
@@ -47,9 +45,8 @@ class Neg:
     
 @dataclass(frozen=True)
 class Eq:
-    vm_op: str = "eq"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "eq"
+    def asm_lines(self, label_id: str, *_):
         return f"""
         @SP
         AM=M-1
@@ -69,9 +66,8 @@ class Eq:
 
 @dataclass(frozen=True)
 class Gt:
-    vm_op: str = "gt"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "gt"
+    def asm_lines(self, label_id: str, *_):
         return f"""
         @SP
         AM=M-1
@@ -91,9 +87,8 @@ class Gt:
 
 @dataclass(frozen=True)
 class Lt:
-    vm_op: str = "lt"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "lt"
+    def asm_lines(self, label_id: str, *_):
         return f"""
         @SP
         AM=M-1
@@ -113,9 +108,8 @@ class Lt:
     
 @dataclass(frozen=True)
 class And:
-    vm_op: str = "and"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "and"
+    def asm_lines(self, label_id: str, *_):
         return """
         @SP
         AM=M-1
@@ -128,9 +122,8 @@ class And:
     
 @dataclass(frozen=True)
 class Or:
-    vm_op: str = "or"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "or"
+    def asm_lines(self, label_id: str, *_):
         return """
         @SP
         AM=M-1
@@ -143,9 +136,8 @@ class Or:
 
 @dataclass(frozen=True)
 class Not:
-    vm_op: str = "not"
-    vm_args: None = None
-    def asm_lines(self, label_id: str):
+    vm_op: ClassVar[str] = "not"
+    def asm_lines(self, label_id: str, *_):
         return """
         @SP
         A=M-1
