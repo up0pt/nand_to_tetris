@@ -1,14 +1,16 @@
-from typing import Protocol
+from __future__ import annotations
+from typing import Any, ClassVar
+class VmCmd:
+    vm_op2cmd: ClassVar[dict[str, type["VmCmd"]]] = {}
+    vm_op: ClassVar[str]
 
-class Command(Protocol):
-    vm_ops: str
-    vm_ops_split: list[str | int]
+    def __init_subclass__(cls, **kwargs: Any) -> None:
+        super().__init_subclass__(**kwargs)
+        op = getattr(cls, "vm_op")
+        if op:
+            if op in VmCmd.vm_op2cmd:
+                raise ValueError(f"duplicated ops: {op}")
+            VmCmd.vm_op2cmd[op] = cls
+    
     def asm_lines(self)-> str:
-        """
-        asm_lines の Docstring
-        
-        :param self:
-        :return: vm command に対応する asm の command lines
-        :rtype: str
-        """
-        ...
+        raise NotImplementedError
