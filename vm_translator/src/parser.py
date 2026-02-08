@@ -2,19 +2,18 @@ from pathlib import Path
 from typing import Union
 
 from commands.arithmetic_command_type import (
-    ArithmeticCommands,
-    ARITH_VALUES,
+    Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
 )
 from commands.memory_access_command_type import Segment, Push, Pop
 from commands.program_flow_command_type import Label, Goto, If
 from commands.function_call_command_type import Function, Call, Return
-from commands.command_kind import CommandKind
+from commands.command_kind import Command
 
 class Parser:
     def __init__(self, path_str: str) -> None:
         self.path = Path(path_str)
-        self.piled_commands: list[str] = self.path.read_text().splitlines()
-        self.now_command: CommandKind | None = None
+        self.piled_commands: list[str] = self.path.read_text(encoding="utf-8").splitlines()
+        self.now_command: Command | None = None
 
     def has_more_commands(self) -> bool:
         """
@@ -33,7 +32,7 @@ class Parser:
             raise RuntimeError("Parser.advance() called with no remaining commands")
         self.now_command = self._segmentation(self.piled_commands.pop(0))
 
-    def command_type(self) -> CommandKind | None:
+    def command_type(self) -> Command | None:
         return self.now_command
 
     @staticmethod
@@ -41,14 +40,14 @@ class Parser:
         return raw_command_line.split("//", 1)[0].strip()
 
     @staticmethod
-    def _segmentation(raw_command_line: str) -> CommandKind:
+    def _segmentation(raw_command_line: str) -> Command:
         splited_raw_command_line: list[str] = Parser._remove_comment_from_line(
             raw_command_line
         ).split()
 
         match splited_raw_command_line:
             case [arith_op] if arith_op in ARITH_VALUES:
-                return ArithmeticCommands(arith_op)
+                return 
             case [Push.op_str, seg, index]:
                 return Push(seg=Segment(seg), index=int(index))
             case [Pop.op_str, seg, index]:
