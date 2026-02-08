@@ -1,20 +1,20 @@
 from dataclasses import dataclass
+from command_kind import VmCmd
 
 
 @dataclass(frozen=True)
-class Function:
-    func_name: str
-    n_locals: int
-    op_str: str = "function"
+class Function(VmCmd):
+    vm_args: tuple[str, int]
+    vm_op: str = "function"
 
 
 @dataclass(frozen=True)
-class Call:
-    func_name: str
-    n_args: int
-    op_str: str = "call"
+class Call(VmCmd):
+    vm_args: tuple[str, int]
+    vm_op: str = "call"
 
 
 @dataclass(frozen=True)
-class Return:
-    op_str: str = "return"
+class Return(VmCmd):
+    vm_args: None = None
+    vm_op: str = "return"

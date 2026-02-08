@@ -3,6 +3,7 @@ from typing import Any, ClassVar
 class VmCmd:
     vm_op2cmd: ClassVar[dict[str, type["VmCmd"]]] = {}
     vm_op: ClassVar[str]
+    vm_args: tuple[Any,...] | None
 
     def __init_subclass__(cls, **kwargs: Any) -> None:
         super().__init_subclass__(**kwargs)

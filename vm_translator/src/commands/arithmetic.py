@@ -4,7 +4,7 @@ from command_kind import VmCmd
 @dataclass(frozen=True)
 class Add(VmCmd):
     vm_op: str = "add"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return """
         @SP
@@ -20,7 +20,7 @@ class Add(VmCmd):
 @dataclass(frozen=True)
 class Sub:
     vm_op: str = "sub"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return """
         @SP
@@ -36,7 +36,7 @@ class Sub:
 @dataclass(frozen=True)
 class Neg:
     vm_op: str = "neg"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return """
         @SP
@@ -48,7 +48,7 @@ class Neg:
 @dataclass(frozen=True)
 class Eq:
     vm_op: str = "eq"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return f"""
         @SP
@@ -70,7 +70,7 @@ class Eq:
 @dataclass(frozen=True)
 class Gt:
     vm_op: str = "gt"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return f"""
         @SP
@@ -92,7 +92,7 @@ class Gt:
 @dataclass(frozen=True)
 class Lt:
     vm_op: str = "lt"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return f"""
         @SP
@@ -114,7 +114,7 @@ class Lt:
 @dataclass(frozen=True)
 class And:
     vm_op: str = "and"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return """
         @SP
@@ -129,7 +129,7 @@ class And:
 @dataclass(frozen=True)
 class Or:
     vm_op: str = "or"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return """
         @SP
@@ -144,7 +144,7 @@ class Or:
 @dataclass(frozen=True)
 class Not:
     vm_op: str = "not"
-    vm_args: list[str] = []
+    vm_args: None = None
     def asm_lines(self, label_id: str):
         return """
         @SP
