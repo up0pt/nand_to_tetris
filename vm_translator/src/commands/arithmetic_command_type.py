@@ -1,20 +1,152 @@
-from enum import Enum, auto
-from typing import cast
+from dataclasses import dataclass
 
+@dataclass(frozen=True)
+class Add:
+    vm_op: str = "add"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        AM=M-1
+        D=M
+        M=0
+        @SP
+        AM=M-1
+        M=D+M
+        D=0
+        """
 
-class ArithmeticCommands(Enum):
-    def _generate_next_value_(name: str, start, count, last_values) -> str:
-        return str.lower(name)
+@dataclass(frozen=True)
+class Sub:
+    vm_op: str = "sub"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        AM=M-1
+        D=M
+        M=0
+        @SP
+        AM=M-1
+        M=M-D
+        D=0
+        """
+    
+@dataclass(frozen=True)
+class Neg:
+    vm_op: str = "neg"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        A=M-1
+        M=!M
+        M=M+1
+        """
+    
+@dataclass(frozen=True)
+class Eq:
+    vm_op: str = "eq"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        AM=M-1
+        D=M
+        M=0
+        A=A-1
+        D=D-M
+        M=0
+        @END
+        D;JNE
+        @SP
+        A=M-1
+        M=-1
+        (END)
+        D=0
+        """
 
-    ADD = auto()
-    SUB = auto()
-    NEQ = auto()
-    EQ = auto()
-    GT = auto()
-    LT = auto()
-    AND = auto()
-    OR = auto()
-    NOT = auto()
+@dataclass(frozen=True)
+class Gt:
+    vm_op: str = "gt"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        AM=M-1
+        D=M
+        M=0
+        A=A-1
+        D=D-M
+        M=-1
+        @END
+        D;JLT
+        @SP
+        A=M-1
+        M=0
+        (END)
+        D=0
+        """
 
+@dataclass(frozen=True)
+class Lt:
+    vm_op: str = "lt"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        AM=M-1
+        D=M
+        M=0
+        A=A-1
+        D=D-M
+        M=-1
+        @END
+        D;JGT
+        @SP
+        A=M-1
+        M=0
+        (END)
+        D=0
+        """
+    
+@dataclass(frozen=True)
+class And:
+    vm_op: str = "and"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        AM=M-1
+        D=M
+        M=0
+        A=A-1
+        M=D&M
+        D=0
+        """
+    
+@dataclass(frozen=True)
+class Or:
+    vm_op: str = "or"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        AM=M-1
+        D=M
+        M=0
+        A=A-1
+        M=D|M
+        D=0
+        """
 
-ARITH_VALUES: set[str] = {cast(str, e.value) for e in ArithmeticCommands}
+@dataclass(frozen=True)
+class Not:
+    vm_op: str = "not"
+    vm_args: list[str] = []
+    def asm_lines(self):
+        return """
+        @SP
+        A=M-1
+        M=!M
+        """
