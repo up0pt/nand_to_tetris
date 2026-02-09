@@ -1,34 +1,26 @@
 from pathlib import Path
+from typing import TextIO
 
-from vm_translator.src.commands.arithmetic import ArithmeticCommands
-from vm_translator.src.commands.memory_access import Push, Pop
-from vm_translator.src.commands.program_flow import Label, Goto, If
-from vm_translator.src.commands.function_call import Function, Call, Return
-from commands.command_kind import CommandKind
+from commands.command_kind import VmCmd
 
 class CodeWriter:
-    def __init__(self, path: Path) -> None:
-        self.path = Path
+    def __init__(self, path: str) -> None:
+        self.path: Path = Path(path)
+        self._f: TextIO = open(self.path, "w", encoding="utf-8", newline="\n")
+        self.label_id_num = 0
 
     def set_file_name(self, filename: str) -> None:
-        """
-        用途がまだわからない．
-        
-        :param self: 説明
-        :param filename: 説明
-        :type filename: str
-        """
         self.file_name = filename
 
-    def write_arithmetic(self, command: ArithmeticCommands) -> None:
-        
+    def write_arithmetic(self, command: VmCmd) -> None:
+        self.write_all_command(command)
 
-    def write_push_pop(self, command: PushOrPop, segment: Segment, index: int) -> None:
-        if command not in [VMCommandKind.C_PUSH, VMCommandKind.C_POP]:
-            raise ValueError(
-                f"command must be either C_PUSH or C_POP, though it was {command}"
-            )
-        raise NotImplementedError
+    def write_push_pop(self, command: VmCmd) -> None:
+        self.write_all_command(command)
+
+    def write_all_command(self, command: VmCmd) -> None:
+        self.label_id_num += 1
+        self._f.write(command.asm_lines(str(self.label_id_num), self.file_name))
 
     def close(self) -> None:
-        raise NotImplementedError
+        self._f.close

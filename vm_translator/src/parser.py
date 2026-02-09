@@ -1,12 +1,6 @@
 from pathlib import Path
 from typing import Union
 
-from vm_translator.src.commands.arithmetic import (
-    Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
-)
-from vm_translator.src.commands.memory_access import Segment, Push, Pop
-from vm_translator.src.commands.program_flow import Label, Goto, If
-from vm_translator.src.commands.function_call import Function, Call, Return
 from commands.command_kind import VmCmd
 
 class Parser:
@@ -45,26 +39,10 @@ class Parser:
             raw_command_line
         ).split()
 
-        match splited_raw_command_line:
-            case [arith_op] if arith_op in ARITH_VALUES:
-                return 
-            case [Push.op_str, seg, index]:
-                return Push(seg=Segment(seg), index=int(index))
-            case [Pop.op_str, seg, index]:
-                return Pop(seg=Segment(seg), index=int(index))
-            case [Label.op_str, symbol]:
-                return Label(symbol=symbol)
-            case [Goto.op_str, symbol]:
-                return Goto(symbol=symbol)
-            case [If.op_str, symbol]:
-                return If(symbol=symbol)
-            case [Function.op_str, func_name, n_locals]:
-                return Function(func_name=func_name, n_locals=int(n_locals))
-            case [Call.op_str, func_name, n_args]:
-                return Call(func_name=func_name, n_args=n_args)
-            case [Return.op_str]:
-                return Return()
-            case _:
-                raise RuntimeError(
-                    f"Detected a command {raw_command_line} which doesn't align VM command rules"
-                )
+        op, *args = splited_raw_command_line
+
+        if len(splited_raw_command_line) == 0:
+            raise ValueError
+        else:
+            return VmCmd.vm_op2cmd[op](*args)
+            
