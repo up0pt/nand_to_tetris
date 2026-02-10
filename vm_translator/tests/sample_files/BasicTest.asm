@@ -208,7 +208,7 @@ AM=M-1
 D=M
 M=0
 @SP
-AM=M-1
+A=M-1
 M=D+M
 D=0
         
@@ -230,7 +230,7 @@ AM=M-1
 D=M
 M=0
 @SP
-AM=M-1
+A=M-1
 M=M-D
 D=0
         
@@ -265,7 +265,7 @@ AM=M-1
 D=M
 M=0
 @SP
-AM=M-1
+A=M-1
 M=D+M
 D=0
         
@@ -274,7 +274,7 @@ AM=M-1
 D=M
 M=0
 @SP
-AM=M-1
+A=M-1
 M=M-D
 D=0
         
@@ -296,7 +296,7 @@ AM=M-1
 D=M
 M=0
 @SP
-AM=M-1
+A=M-1
 M=D+M
 D=0
         
