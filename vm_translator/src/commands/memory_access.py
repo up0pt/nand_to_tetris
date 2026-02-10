@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field, InitVar
 from enum import Enum, auto, unique
 from typing import ClassVar
-from command_kind import VmCmd
-from assembler.src.predefined_symbols import (generic_Register1, generic_Register2, generic_Register3)
+from .command_kind import VmCmd
+from .predefined_symbols import (generic_Register1, generic_Register2, generic_Register3)
 
 
 @unique
@@ -31,7 +31,7 @@ class Push(VmCmd):
 
     def __post_init__(self):
         object.__setattr__(self, "segment", Segment(self.raw_segment))
-        object.__setattr__(self, "index", Segment(self.raw_index))
+        object.__setattr__(self, "index", int(self.raw_index))
 
     def asm_lines(self, label_id: str, file_name: str) -> str:
         match self.segment:
@@ -162,7 +162,7 @@ class Pop(VmCmd):
 
     def __post_init__(self):
         object.__setattr__(self, "segment", Segment(self.raw_segment))
-        object.__setattr__(self, "index", Segment(self.raw_index))
+        object.__setattr__(self, "index", int(self.raw_index))
 
     def asm_lines(self, label_id: str, file_name: str) -> str:
         match self.segment:
