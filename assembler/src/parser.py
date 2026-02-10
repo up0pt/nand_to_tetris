@@ -9,7 +9,7 @@ COMMENT_SEP = "//"
 class Parser:
     def __init__(self, path: Path) -> None:
         self.path: Path = path
-        self.dirty_commands: list[str] = self.path.read_text().split("\n")
+        self.dirty_commands: list[str] = self.path.read_text().splitlines() # Path.read_text().split("\n")だと\r\nや空白行に弱いらしい．
 
     def hasMoreCommands(self) -> bool:
         return bool(len(self.dirty_commands))
