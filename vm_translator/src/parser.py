@@ -1,6 +1,10 @@
 from pathlib import Path
 
 from commands.command_kind import VmCmd
+from commands.arithmetic import (
+    Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
+)
+from commands.memory_access import Segment, Push, Pop
 
 class Parser:
     def __init__(self, input_path: Path) -> None:

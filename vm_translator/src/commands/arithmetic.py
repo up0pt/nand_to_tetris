@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import ClassVar
-from command_kind import VmCmd
+from .command_kind import VmCmd
 
 @dataclass(frozen=True)
 class Add(VmCmd):

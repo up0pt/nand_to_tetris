@@ -1,11 +1,5 @@
 from __future__ import annotations
 from typing import Any, ClassVar
-
-from commands.arithmetic import (
-    Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
-)
-from memory_access import Segment, Push, Pop
-
 class VmCmd:
     vm_op2cmd: ClassVar[dict[str, type["VmCmd"]]] = {}
     vm_op: ClassVar[str]
