@@ -1,11 +1,10 @@
 from pathlib import Path
-from typing import Union
 
 from commands.command_kind import VmCmd
 
 class Parser:
-    def __init__(self, path_str: str) -> None:
-        self.path = Path(path_str)
+    def __init__(self, input_path: Path) -> None:
+        self.path = input_path
         self.piled_commands: list[str] = self.path.read_text(encoding="utf-8").splitlines()
         self.now_command: VmCmd | None = None
 

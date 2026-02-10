@@ -4,9 +4,12 @@ from typing import TextIO
 from commands.command_kind import VmCmd
 
 class CodeWriter:
-    def __init__(self, path: str) -> None:
-        self.path: Path = Path(path)
-        self._f: TextIO = open(self.path, "w", encoding="utf-8", newline="\n")
+    def __init__(self, input_vm_path: Path, out_dir: Path) -> None:
+        self.path: Path = input_vm_path
+        self.set_file_name(input_vm_path.stem)
+        self.out_dir: Path = out_dir
+
+        self._f: TextIO = open(self.out_dir / self.path.with_suffix(".asm"), "w", encoding="utf-8", newline="\n")
         self.label_id_num = 0
 
     def set_file_name(self, filename: str) -> None:
