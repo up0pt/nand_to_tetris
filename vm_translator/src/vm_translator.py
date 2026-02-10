@@ -5,7 +5,6 @@ from parser import Parser
 from code_writer import CodeWriter
 
 def use_parser(input_path: Path, out_dir: Path):
-    print("using parser")
     vm_parser = Parser(input_path)
     code_writer = CodeWriter(input_vm_path=input_path, out_dir=out_dir)
     while vm_parser.has_more_commands():
@@ -15,6 +14,7 @@ def use_parser(input_path: Path, out_dir: Path):
             raise ValueError("input vm command is None")
         code_writer.write_all_command(vm_cmd)
     code_writer.close()
+    print("vm to asm translation end")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

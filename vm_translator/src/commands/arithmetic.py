@@ -18,7 +18,7 @@ D=0
         """
 
 @dataclass(frozen=True)
-class Sub:
+class Sub(VmCmd):
     vm_op: ClassVar[str] = "sub"
     def asm_lines(self, label_id: str, *_):
         return """
@@ -33,7 +33,7 @@ D=0
         """
     
 @dataclass(frozen=True)
-class Neg:
+class Neg(VmCmd):
     vm_op: ClassVar[str] = "neg"
     def asm_lines(self, label_id: str, *_):
         return """
@@ -44,7 +44,7 @@ M=M+1
         """
     
 @dataclass(frozen=True)
-class Eq:
+class Eq(VmCmd):
     vm_op: ClassVar[str] = "eq"
     def asm_lines(self, label_id: str, *_):
         return f"""
@@ -65,7 +65,7 @@ D=0
         """
 
 @dataclass(frozen=True)
-class Gt:
+class Gt(VmCmd):
     vm_op: ClassVar[str] = "gt"
     def asm_lines(self, label_id: str, *_):
         return f"""
@@ -86,7 +86,7 @@ D=0
         """
 
 @dataclass(frozen=True)
-class Lt:
+class Lt(VmCmd):
     vm_op: ClassVar[str] = "lt"
     def asm_lines(self, label_id: str, *_):
         return f"""
@@ -107,7 +107,7 @@ D=0
         """
     
 @dataclass(frozen=True)
-class And:
+class And(VmCmd):
     vm_op: ClassVar[str] = "and"
     def asm_lines(self, label_id: str, *_):
         return """
@@ -121,7 +121,7 @@ D=0
         """
     
 @dataclass(frozen=True)
-class Or:
+class Or(VmCmd):
     vm_op: ClassVar[str] = "or"
     def asm_lines(self, label_id: str, *_):
         return """
@@ -135,7 +135,7 @@ D=0
         """
 
 @dataclass(frozen=True)
-class Not:
+class Not(VmCmd):
     vm_op: ClassVar[str] = "not"
     def asm_lines(self, label_id: str, *_):
         return """

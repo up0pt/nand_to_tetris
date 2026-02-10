@@ -11,7 +11,6 @@ class VmCmd:
             if op in VmCmd.vm_op2cmd:
                 raise ValueError(f"duplicated ops: {op}")
             VmCmd.vm_op2cmd[op] = cls
-        print(op)
     
     def asm_lines(self, label_id: str, file_name: str)-> str:
         raise NotImplementedError

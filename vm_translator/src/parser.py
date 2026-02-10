@@ -1,9 +1,7 @@
 from pathlib import Path
 
 from commands.command_kind import VmCmd
-from commands.arithmetic import (
-    Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
-)
+from commands.arithmetic import Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
 from commands.memory_access import Segment, Push, Pop
 
 class Parser:
@@ -20,6 +18,8 @@ class Parser:
         :return: 説明
         :rtype: bool
         """
+        if len(self.piled_commands) == 0:
+            return False
         while not Parser._remove_comment_from_line(self.piled_commands[0]):
             self.piled_commands.pop(0)
         return len(self.piled_commands) > 0
