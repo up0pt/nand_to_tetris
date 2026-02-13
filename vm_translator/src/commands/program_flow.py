@@ -1,15 +1,14 @@
 from dataclasses import dataclass
 import re
 from typing import ClassVar
-
-from command_kind import VmCmd
+from .command_kind import VmCmd
 
 @dataclass(frozen=True)
 class Label(VmCmd):
     vm_op: ClassVar[str] = "label"
     label_name: str
 
-    def asm_lines(self, label_id: str, file_name: str):
+    def asm_lines(self, label_id: str, file_name: str)-> str:
         if re.fullmatch(r"^(?!\d)[a-zA-Z0-9_.:]+", self.label_name):
             return f"""
 ({file_name}.{self.label_name})
@@ -39,5 +38,5 @@ class If(VmCmd):
 AM=M-1
 D=M
 @{file_name}.{self.distination}
-D;JMP
+D;JNE
 """

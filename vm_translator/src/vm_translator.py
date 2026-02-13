@@ -4,6 +4,15 @@ from pathlib import Path
 from parser import Parser
 from code_writer import CodeWriter
 
+def add_boostrap(input_path: Path):
+    with input_path.open() as f:
+        f.write("""
+@SP
+M=256
+@Sys.init
+0;JMP                
+                """)
+
 def use_parser(input_path: Path, out_dir: Path):
     vm_parser = Parser(input_path)
     code_writer = CodeWriter(input_vm_path=input_path, out_dir=out_dir)
@@ -22,7 +31,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     input_path = Path(args.input).resolve()
-    out_dir = Path("asm_files")
+    out_dir = Path("asm_files").resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(input_path)
@@ -35,4 +44,4 @@ if __name__ == "__main__":
         raise NotImplementedError
 
     else:
-        raise ValueError
+        raise ValueError("Not found the file or directory")
