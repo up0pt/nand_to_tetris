@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field, InitVar
+from dataclasses import dataclass, field
 from enum import Enum, auto, unique
 from typing import ClassVar
 from .command_kind import VmCmd
