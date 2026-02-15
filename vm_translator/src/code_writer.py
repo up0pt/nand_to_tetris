@@ -30,11 +30,15 @@ M=D
 
     def set_file_name(self, vm_file_path: Path) -> None:
         self.reading_vm_file_path = vm_file_path
+        if self.reading_vm_file_path == self.input_vm_top_path:
+            self.file_name_for_cmd = self.reading_vm_file_path.stem
+        else:
+            relative_path_to_reading_vm_file = self.reading_vm_file_path.relative_to(self.input_vm_top_path)
+            self.file_name_for_cmd = ".".join(relative_path_to_reading_vm_file.with_suffix("").parts)
 
     def write_all_command(self, command: VmCmd) -> None:
         self.label_id_num += 1
-        relative_path_to_reading_vm_file = self.reading_vm_file_path.relative_to(self.input_vm_top_path)
-        self._f.write(command.asm_lines(str(self.label_id_num), ".".join(relative_path_to_reading_vm_file.with_suffix("").parts)))
+        self._f.write(command.asm_lines(str(self.label_id_num), self.file_name_for_cmd))
 
     def close(self) -> None:
         self._f.close
