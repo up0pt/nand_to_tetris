@@ -60,3 +60,5 @@ htmlcov/
 .cache/
 .tox/
 *.ipynb_checkpoints
+
+projects/
