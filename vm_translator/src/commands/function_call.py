@@ -101,3 +101,50 @@ M=D
 @dataclass(frozen=True)
 class Return(VmCmd):
     vm_op: ClassVar[str] = "return"
+    def asm_lines(self, label_id: str, file_name: str) -> str:
+        temp_addr = 5
+        temp_ret_addr = 6
+        return f"""
+//[return] FRAME = LCL
+@LCL
+D=M
+@{temp_addr}
+M=D
+//[return] RET = *(FRAME-5)
+@5
+A=D-A
+D=M
+@{temp_ret_addr}
+M=D
+//[return] *ARG = pop()
+@SP
+A=M-1
+D=M
+@ARG
+A=M
+M=D
+//[return] SP = ARG + 1
+@ARG
+D=M
+@SP
+M=D+1
+//[return] THAT = *(FRAME-1)
+@{temp_addr}
+D=M
+@THAT
+DM=D-1
+//[return] THIS = *(FRAME-2)
+@THIS
+DM=D-1
+//[return] ARG = *(FRAME-3)
+@ARG
+DM=D-1
+//[return] LCL = *(FRAME-4)
+@LCL
+DM=D-1
+//[return] goto RET
+@{temp_ret_addr}
+D=M
+@D
+0;JMP
+"""
