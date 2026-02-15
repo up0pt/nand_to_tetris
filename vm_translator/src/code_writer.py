@@ -13,7 +13,7 @@ class CodeWriter:
         self.label_id_num = 0
 
         self.add_boostrap()
-        print("write boostrap")
+        print("boostrap added!")
         print(f"output file is {self.output_file_path}")
 
     def add_boostrap(self) -> None:
