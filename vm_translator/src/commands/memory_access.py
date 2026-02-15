@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto, unique
 from typing import ClassVar
 from .command_kind import VmCmd
-from .predefined_symbols import (generic_Register1, generic_Register2, generic_Register3)
+from .predefined_symbols import (generic_Register1, generic_Register2)
 
 
 @unique

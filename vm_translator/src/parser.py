@@ -4,6 +4,7 @@ from commands.command_kind import VmCmd
 from commands.arithmetic import Add, Sub, Neg, Eq, Gt, Lt, And, Or, Not
 from commands.memory_access import Segment, Push, Pop
 from commands.program_flow import Label, Goto, If
+from commands.function_call import Call, Function, Return
 
 class Parser:
     def __init__(self, input_path: Path) -> None:

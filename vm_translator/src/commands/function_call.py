@@ -1,6 +1,6 @@
 from dataclasses import dataclass,field
 from typing import ClassVar
-from command_kind import VmCmd
+from .command_kind import VmCmd
 
 NUM_STORED_FUNCTION_STATE: int = 5 # RET, LCL, ARG, THIS, THAT
 
@@ -35,7 +35,7 @@ class Call(VmCmd):
     func_name: str
     raw_args_num: str
 
-    args_num: int
+    args_num: int = field(init=False)
 
     def __post_init__(self):
         object.__setattr__(self, "args_num", int(self.raw_args_num))
@@ -130,21 +130,30 @@ D=M
 M=D+1
 //[return] THAT = *(FRAME-1)
 @{temp_addr}
+AM=M-1
 D=M
 @THAT
-DM=D-1
+M=D
 //[return] THIS = *(FRAME-2)
+@{temp_addr}
+AM=M-1
+D=M
 @THIS
-DM=D-1
+M=D
 //[return] ARG = *(FRAME-3)
+@{temp_addr}
+AM=M-1
+D=M
 @ARG
-DM=D-1
+M=D
 //[return] LCL = *(FRAME-4)
+@{temp_addr}
+AM=M-1
+D=M
 @LCL
-DM=D-1
+M=D
 //[return] goto RET
 @{temp_ret_addr}
-D=M
-@D
+A=M
 0;JMP
 """
