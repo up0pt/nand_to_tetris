@@ -1,14 +1,20 @@
 from dataclasses import dataclass, field
 from enum import Enum, auto, unique
-from typing import ClassVar
+from typing import ClassVar, Any
 from .command_kind import VmCmd
 from .predefined_symbols import (generic_Register1, generic_Register2)
 
 
 @unique
 class Segment(Enum):
-    def _generate_next_value_(name: str, *_):
-        return str.lower(name)
+    @staticmethod
+    def _generate_next_value_(
+        name: str,
+        start: int,
+        count: int,
+        last_values: list[Any]
+        ):
+        return name.lower()
 
     ARGUMENT = auto()
     LOCAL = auto()
