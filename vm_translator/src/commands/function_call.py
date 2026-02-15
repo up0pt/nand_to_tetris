@@ -1,5 +1,6 @@
 from dataclasses import dataclass,field
 from typing import ClassVar
+import re
 from .command_kind import VmCmd
 
 NUM_STORED_FUNCTION_STATE: int = 5 # RET, LCL, ARG, THIS, THAT
@@ -17,8 +18,10 @@ class Function(VmCmd):
         object.__setattr__(self, "local_val_num", int(self.raw_local_val_num))
     
     def asm_lines(self, label_id: str, file_name: str) -> str:
+        if not re.fullmatch(rf"^{re.escape(file_name)}\..+", self.func_name):
+            raise ValueError(f"Function Name should start with File name: but got file name {file_name} and func name {self.func_name}")
         return f"""
-({file_name}.{self.func_name})
+({self.func_name})
 """+"""
 @SP
 A=M
@@ -93,7 +96,7 @@ M=D
 D=D-A
 @ARG
 M=D
-@{file_name}.{self.func_name}
+@{self.func_name}
 0;JMP
 ({ret_label_name})
 """
