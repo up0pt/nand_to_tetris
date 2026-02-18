@@ -34,6 +34,7 @@ if __name__ == "__main__":
     elif input_path.is_dir():
         vm_file_paths = input_path.rglob('*.vm', case_sensitive=False) # match regardless case
         if not vm_file_paths:
+            code_writer.close()
             raise ValueError("No vm files in the given folder!")
         for vm_file_path in vm_file_paths:
             use_parser(vm_file_path, code_writer)
