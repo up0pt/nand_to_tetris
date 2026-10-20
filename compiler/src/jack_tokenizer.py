@@ -52,14 +52,25 @@ class SYMBOL(Enum):
     EQUAL = "="
     TILDE = "~"
 
+SYMBOL_SET = {symbol.value for symbol in SYMBOL}
+BLANK_SET = {" ", "\n", "\t"}
+
 class JackTokenizer():
     def __init__(self, input_path: Path) -> None:
         self.input_path = input_path
         self.piled_jack_chars = Path.read_text(input_path, "utf-8")
+        self.token_start_idx = 0
+        self.token_end_idx = 0
+
+    def _is_start_idx_ltn_len(self) -> bool:
+        return self.token_start_idx+1 < len(self.piled_jack_chars)
 
     def has_more_token(self) -> bool:
-        raise NotImplementedError()
+        while self._is_start_idx_ltn_len() and self.piled_jack_chars[self.token_start_idx+1] in BLANK_SET:
+            self.token_start_idx += 1
 
+        return self._is_start_idx_ltn_len()
+        
     def advance(self) -> None:
         raise NotImplementedError()
     
