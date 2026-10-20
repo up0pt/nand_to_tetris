@@ -1,8 +1,6 @@
 from pathlib import Path
 from enum import Enum, auto
 
-from protocols import Compiler
-
 class TOKEN_TYPE(Enum):
     KEYWORD = auto()
     SYMBOL = auto()
@@ -33,53 +31,52 @@ class KEYWORD(Enum):
     NULL = auto()
     THIS = auto()
 
+class SYMBOL(Enum):
+    LEFT_BRACE = "{"
+    RIGHT_BRACE = "}"
+    LEFT_PAREN = "("
+    RIGHT_PAREN = ")"
+    LEFT_BRACKET = "["
+    RIGHT_BRACKET = "]"
+    DOT = "."
+    COMMA = ","
+    SEMICOLON = ";"
+    PLUS = "+"
+    MINUS = "-"
+    ASTERISK = "*"
+    SLASH = "/"
+    AMPERSAND = "&"
+    PIPE = "|"
+    LESS_THAN = "<"
+    GREATER_THAN = ">"
+    EQUAL = "="
+    TILDE = "~"
+
 class JackTokenizer():
-    def __init__(self, input_path: Path, compile_engine: Compiler) -> None:
+    def __init__(self, input_path: Path) -> None:
         self.input_path = input_path
-        self.piled_jack = Path.read_text(input_path, "utf-8").splitlines()
-        self.now_instruction = None
-        self.now_token = ""
-        self.now_token_type: TOKEN_TYPE | None = None
-        self.now_token_keyword = None
+        self.piled_jack_chars = Path.read_text(input_path, "utf-8")
 
     def has_more_token(self) -> bool:
-        if len(self.piled_jack) == 0:
-            return False
-        return True
+        raise NotImplementedError()
+
+    def advance(self) -> None:
+        raise NotImplementedError()
     
-    def tokey_type(self) -> TOKEN_TYPE:
-        if not self.now_token_type:
-            raise ValueError("now token type is not set")
-        return self.now_token_type
+    def token_type(self) -> TOKEN_TYPE:
+        raise NotImplementedError()
     
     def keyword(self) -> KEYWORD:
-        if not self.now_token_keyword:
-            raise ValueError("now token keyword is not set")
-        return self.now_token_keyword
+        raise NotImplementedError()
     
     def symbol(self) -> str:
-        if self.now_token_type == TOKEN_TYPE.SYMBOL:
-            return self.now_token
-        else:
-            raise ValueError(f"token type should be symbol, but got {self.now_token_type}")
+        raise NotImplementedError()
 
     def identifier(self) -> str:
-        if self.now_token_type == TOKEN_TYPE.IDENTIFIER:
-            return self.now_token
-        else:
-            raise ValueError(f"token type should be Identifier, but got {self.now_token_type}")
+        raise NotImplementedError()
         
     def intval(self) -> int:
-        if self.now_token_type == TOKEN_TYPE.INT_CONST:
-            try:
-                return int(self.now_token)
-            except (ValueError, TypeError):
-                raise ValueError((f"token should be able to be integer, but got {self.now_token}"))
-        else:
-            raise ValueError(f"token type should be INT_CONST, but got {self.now_token_type}")
+        raise NotImplementedError()
     
     def string_val(self) -> str:
-        if self.now_token_type == TOKEN_TYPE.STRING_CONST:
-            return self.now_token
-        else:
-            raise ValueError(f"token type should be STRING_CONST, but got {self.now_token_type}")
+        raise NotImplementedError()

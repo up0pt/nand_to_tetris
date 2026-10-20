@@ -1,7 +1,5 @@
 import sys
 from pathlib import Path
-
-from jack_tokenizer import JackTokenizer
 from compilation_engine import CompilationEngine
 
 class JackAnalyzer():
@@ -13,8 +11,9 @@ class JackAnalyzer():
     
     def parse_all_files(self) -> None:
         for (input, output) in self.input_output_paths:
-            compilation_engine = CompilationEngine(output)
-            _jack_tokenizer = JackTokenizer(input, compilation_engine)
+            compilation_engine = CompilationEngine(input, output)
+            compilation_engine.start()
+            
 
 
 def file_searcher(input_path: Path, file_extention_glob: str = "*.jack") -> list[Path]:
@@ -33,6 +32,7 @@ def make_blank_tokened_file_objects(source_file: list[Path]) -> list[tuple[Path,
     return [(file, file.with_suffix(".xml")) for file in source_file]
     
 def main():
+    raise NotImplementedError()
     args = sys.argv[1]
     input_path = Path(args)
 
@@ -40,3 +40,7 @@ def main():
     input_output_files = make_blank_tokened_file_objects(input_jack_files)
 
     _jackanalyzer = JackAnalyzer(input_output_files)
+
+
+if __name__ == "__main__":
+    main()
