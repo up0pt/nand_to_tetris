@@ -1,5 +1,6 @@
 from pathlib import Path
 from enum import Enum, auto, StrEnum
+import re
 
 class TOKEN_TYPE(StrEnum):
     KEYWORD = auto()
@@ -103,6 +104,8 @@ class JackTokenizer():
                 return TOKEN_TYPE.SYMBOL
             case _ if token in KEYWORD_SET:
                 return TOKEN_TYPE.KEYWORD
+            case _ if re.match(r"\d+", token):
+                return TOKEN_TYPE.INT_CONST
             case _ :
                 raise NotImplementedError()
     
