@@ -72,7 +72,12 @@ class JackTokenizer():
         return start_idx
 
     def _skip_before_whitespace_or_comments(self, end_idx: int) -> int:
+        if self.piled_jack_chars[end_idx] in SYMBOL_SET:
+            return end_idx
+        
         while self._is_idx_ltn_len(end_idx+1) and self.piled_jack_chars[end_idx+1] not in BLANK_SET:
+            if self.piled_jack_chars[end_idx+1] in SYMBOL_SET:
+                return end_idx
             end_idx += 1
         
         return end_idx
