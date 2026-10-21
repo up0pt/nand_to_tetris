@@ -30,15 +30,15 @@ def test_has_more_token(make_tokenizer: Callable[[str], JackTokenizer], text: st
 @pytest.mark.parametrize(
     ("text", "expected"),
     [
-        ("return 123", 0),
-        ("   \n   {02}  ", 7),
-        ("   \n \n kx_1_2z  ", 7),
-        ("0\n 11", 0),
-        ('      xyz123kk', 6),
-        ("\n  while", 3),
+        ("return 123", (0, 5)),
+        ("   \n   {02}  ", (7, 10)),
+        ("   \n \n kx_1_2z  ", (7, 13)),
+        ("0\n 11", (0, 0)),
+        ('      xyz123kk', (6, 13)),
+        ("\n  while", (3, 7)),
     ],
 )
-def test_advance_skip_whitespace(make_tokenizer: Callable[[str], JackTokenizer], text: str, expected: str):
+def test_advance_skip_whitespace(make_tokenizer: Callable[[str], JackTokenizer], text: str, expected: tuple[int, int]):
     jack_tokenizer = make_tokenizer(text)
     jack_tokenizer.advance()
     assert jack_tokenizer.now_idx() == expected

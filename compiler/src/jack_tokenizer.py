@@ -63,7 +63,7 @@ class JackTokenizer():
         self._token_end_idx = 0
 
     def _is_idx_ltn_len(self, idx: int) -> bool:
-        return idx+1 < len(self.piled_jack_chars)
+        return idx < len(self.piled_jack_chars)
 
     def _skip_whitespace_and_comments(self, start_idx: int) -> int:
         while self._is_idx_ltn_len(start_idx) and self.piled_jack_chars[start_idx] in BLANK_SET:
@@ -71,8 +71,14 @@ class JackTokenizer():
 
         return start_idx
 
-    def now_idx(self) -> int:
-        return self._token_start_idx
+    def _skip_before_whitespace_or_comments(self, end_idx: int) -> int:
+        while self._is_idx_ltn_len(end_idx+1) and self.piled_jack_chars[end_idx+1] not in BLANK_SET:
+            end_idx += 1
+        
+        return end_idx
+
+    def now_idx(self) -> tuple[int,int]:
+        return (self._token_start_idx, self._token_end_idx)
 
     def has_more_token(self) -> bool:
         start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
@@ -81,6 +87,7 @@ class JackTokenizer():
     def advance(self) -> None:
         if self.has_more_token():
             self._token_start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
+            self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
     
     def token_type(self) -> TOKEN_TYPE:
         raise NotImplementedError()
