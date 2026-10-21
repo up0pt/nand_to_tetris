@@ -59,20 +59,28 @@ class JackTokenizer():
     def __init__(self, input_path: Path) -> None:
         self.input_path = input_path
         self.piled_jack_chars = Path.read_text(input_path, "utf-8")
-        self.token_start_idx = 0
-        self.token_end_idx = 0
+        self._token_start_idx = 0
+        self._token_end_idx = 0
 
-    def _is_start_idx_ltn_len(self) -> bool:
-        return self.token_start_idx+1 < len(self.piled_jack_chars)
+    def _is_idx_ltn_len(self, idx: int) -> bool:
+        return idx+1 < len(self.piled_jack_chars)
+
+    def _skip_whitespace_and_comments(self, start_idx: int) -> int:
+        while self._is_idx_ltn_len(start_idx) and self.piled_jack_chars[start_idx] in BLANK_SET:
+            start_idx += 1
+
+        return start_idx
+
+    def now_idx(self) -> int:
+        return self._token_start_idx
 
     def has_more_token(self) -> bool:
-        while self._is_start_idx_ltn_len() and self.piled_jack_chars[self.token_start_idx+1] in BLANK_SET:
-            self.token_start_idx += 1
-
-        return self._is_start_idx_ltn_len()
+        start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
+        return self._is_idx_ltn_len(start_idx)
         
     def advance(self) -> None:
-        raise NotImplementedError()
+        if self.has_more_token():
+            self._token_start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
     
     def token_type(self) -> TOKEN_TYPE:
         raise NotImplementedError()
