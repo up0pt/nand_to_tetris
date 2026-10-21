@@ -1,14 +1,14 @@
 from pathlib import Path
-from enum import Enum, auto
+from enum import Enum, auto, StrEnum
 
-class TOKEN_TYPE(Enum):
+class TOKEN_TYPE(StrEnum):
     KEYWORD = auto()
     SYMBOL = auto()
     IDENTIFIER = auto()
     INT_CONST = auto()
     STRING_CONST = auto()
 
-class KEYWORD(Enum):
+class KEYWORD(StrEnum):
     CLASS = auto()
     METHOD = auto()
     FUNCTION = auto()
@@ -95,7 +95,13 @@ class JackTokenizer():
             self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
     
     def token_type(self) -> TOKEN_TYPE:
-        raise NotImplementedError()
+        token = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
+
+        match token:
+            case _ if token in SYMBOL_SET:
+                return TOKEN_TYPE.SYMBOL
+            case _ :
+                raise NotImplementedError()
     
     def keyword(self) -> KEYWORD:
         raise NotImplementedError()

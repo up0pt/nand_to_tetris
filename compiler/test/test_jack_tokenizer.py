@@ -60,12 +60,14 @@ def test_advance_skip_whitespace_with_symbol(make_tokenizer: Callable[[str], Jac
 @pytest.mark.parametrize(
     ("text", "expected"),
     [
-        ("return 123", "KEYWORD"),
-        ("   \n   {02}  ", "SYMBOL"),
-        ("   \n \n kx_1_2z  ", "IDENTIFIER"),
-        ("0\n 11", "INT_CONST"),
-        ('   xyz123kk', "STRING_CONST")
+        ("return 123", "keyword"),
+        ("   \n   {02}  ", "symbol"),
+        ("   \n \n kx_1_2z  ", "identifier"),
+        ("0\n 11", "int_const"),
+        ('   xyz123kk', "string_const")
     ],
 )
-def test_token_type(text: str, expected: str):
-    return None
+def test_token_type(make_tokenizer: Callable[[str], JackTokenizer], text: str, expected: str):
+    jack_tokenizer = make_tokenizer(text)
+    jack_tokenizer.advance()
+    assert jack_tokenizer.token_type().value == expected
