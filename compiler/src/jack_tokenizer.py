@@ -53,6 +53,7 @@ class SYMBOL(Enum):
     TILDE = "~"
 
 SYMBOL_SET = {symbol.value for symbol in SYMBOL}
+KEYWORD_SET = {keyword.value for keyword in KEYWORD}
 BLANK_SET = {" ", "\n", "\t"}
 
 class JackTokenizer():
@@ -100,6 +101,8 @@ class JackTokenizer():
         match token:
             case _ if token in SYMBOL_SET:
                 return TOKEN_TYPE.SYMBOL
+            case _ if token in KEYWORD_SET:
+                return TOKEN_TYPE.KEYWORD
             case _ :
                 raise NotImplementedError()
     
