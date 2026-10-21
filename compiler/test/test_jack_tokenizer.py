@@ -64,7 +64,7 @@ def test_advance_skip_whitespace_with_symbol(make_tokenizer: Callable[[str], Jac
         ("   \n   {02}  ", "symbol"),
         ("   \n \n kx_1_2z  ", "identifier"),
         ("0\n 11", "int_const"),
-        ('   xyz123kk', "string_const")
+        ('   "xyz123kk"', "string_const")
     ],
 )
 def test_token_type(make_tokenizer: Callable[[str], JackTokenizer], text: str, expected: str):

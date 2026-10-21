@@ -95,19 +95,31 @@ class JackTokenizer():
         if self.has_more_token():
             self._token_start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
             self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
+
+    def _is_identifier(self, token: str) -> bool:
+        return re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", token) is not None
+
+    def _is_int_const(self, token: str) -> bool:
+        return re.fullmatch(r"[0-9]+", token) is not None and 0 <= int(token) <= 32767 # Don't use \d. In python, \d matches full-width charactors, too.
+
+    def _is_string_const(self, token: str) -> bool:
+        return token.isascii() and re.fullmatch(r'"[^"\r\n]*"', token) is not None
     
     def token_type(self) -> TOKEN_TYPE:
         token = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
 
-        match token:
-            case _ if token in SYMBOL_SET:
-                return TOKEN_TYPE.SYMBOL
-            case _ if token in KEYWORD_SET:
-                return TOKEN_TYPE.KEYWORD
-            case _ if re.match(r"\d+", token):
-                return TOKEN_TYPE.INT_CONST
-            case _ :
-                raise NotImplementedError()
+        if token in KEYWORD_SET:
+            return TOKEN_TYPE.KEYWORD
+        elif token in SYMBOL_SET:
+            return TOKEN_TYPE.SYMBOL
+        elif self._is_identifier(token):
+            return TOKEN_TYPE.IDENTIFIER
+        elif self._is_int_const(token):
+            return TOKEN_TYPE.INT_CONST
+        elif self._is_string_const(token):
+            return TOKEN_TYPE.STRING_CONST
+        else:
+            raise NotImplementedError(f"{token} is not recognized as Token")
     
     def keyword(self) -> KEYWORD:
         raise NotImplementedError()
