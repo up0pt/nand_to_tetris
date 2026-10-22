@@ -53,7 +53,15 @@ class Symbol(StrEnum):
     EQUAL = "="
     TILDE = "~"
 
-
+class Identifier(str):
+    def __new__(cls, text: str) -> "Identifier":
+        if not Identifier.is_identifier(text):
+            raise ValueError(f"Invalid identifier: {text!r}")
+        return super().__new__(cls, text)
+    
+    @classmethod
+    def is_identifier(cls, text: str) -> bool:
+        return re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", text) is not None
 
 SYMBOL_SET = {symbol.value for symbol in Symbol}
 KEYWORD_SET = {keyword.value for keyword in Keyword}
@@ -99,9 +107,6 @@ class JackTokenizer():
             self._token_start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
             self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
 
-    def _is_identifier(self, token: str) -> bool:
-        return re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", token) is not None
-
     def _is_int_const(self, token: str) -> bool:
         return re.fullmatch(r"[0-9]+", token) is not None and 0 <= int(token) <= 32767 # Don't use \d. In python, \d matches full-width charactors, too.
 
@@ -115,7 +120,7 @@ class JackTokenizer():
             return TokenType.KEYWORD
         elif self.token in SYMBOL_SET:
             return TokenType.SYMBOL
-        elif self._is_identifier(self.token):
+        elif Identifier.is_identifier(self.token):
             return TokenType.IDENTIFIER
         elif self._is_int_const(self.token):
             return TokenType.INT_CONST
