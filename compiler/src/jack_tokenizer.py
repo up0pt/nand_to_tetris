@@ -32,6 +32,10 @@ class Keyword(StrEnum):
     NULL = auto()
     THIS = auto()
 
+    @classmethod
+    def is_keyword(cls, text: str) -> bool:
+        return text in {keyword.value for keyword in Keyword}
+
 class Symbol(StrEnum):
     LEFT_BRACE = "{"
     RIGHT_BRACE = "}"
@@ -53,6 +57,10 @@ class Symbol(StrEnum):
     EQUAL = "="
     TILDE = "~"
 
+    @classmethod
+    def is_symbol(cls, text: str) -> bool:
+        return text in {symbol.value for symbol in Symbol}
+
 class Identifier(str):
     def __new__(cls, text: str) -> "Identifier":
         if not Identifier.is_identifier(text):
@@ -63,8 +71,27 @@ class Identifier(str):
     def is_identifier(cls, text: str) -> bool:
         return re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", text) is not None
 
-SYMBOL_SET = {symbol.value for symbol in Symbol}
-KEYWORD_SET = {keyword.value for keyword in Keyword}
+class IntConst(str):
+    def __new__(cls, text: str) -> "IntConst":
+        if not IntConst.is_int_const(text):
+            raise ValueError(f"Invalid identifier: {text!r}")
+        return super().__new__(cls, text)
+
+    @classmethod
+    def is_int_const(cls, text: str) -> bool:
+        return re.fullmatch(r"[0-9]+", text) is not None and 0 <= int(text) <= 32767 # Don't use r"\d+". In python, \d matches full-width charactors, too.
+
+class StringConst(str):
+    def __new__(cls, text: str) -> "StringConst":
+        if not StringConst.is_string_const(text):
+            raise ValueError(f"Invalid StringConst: {text!r}")
+
+        return super().__new__(cls, text)
+    
+    @classmethod
+    def is_string_const(cls, token: str) -> bool:
+        return token.isascii() and re.fullmatch(r'"[^"\r\n]*"', token) is not None
+
 BLANK_SET = {" ", "\n", "\t"}
 
 class JackTokenizer():
@@ -85,11 +112,11 @@ class JackTokenizer():
         return start_idx
 
     def _skip_before_whitespace_or_comments(self, end_idx: int) -> int:
-        if self.piled_jack_chars[end_idx] in SYMBOL_SET:
+        if Symbol.is_symbol(self.piled_jack_chars[end_idx]):
             return end_idx
         
         while self._is_idx_ltn_len(end_idx+1) and self.piled_jack_chars[end_idx+1] not in BLANK_SET:
-            if self.piled_jack_chars[end_idx+1] in SYMBOL_SET:
+            if Symbol.is_symbol(self.piled_jack_chars[end_idx+1]):
                 return end_idx
             end_idx += 1
         
@@ -106,25 +133,19 @@ class JackTokenizer():
         if self.has_more_token():
             self._token_start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
             self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
-
-    def _is_int_const(self, token: str) -> bool:
-        return re.fullmatch(r"[0-9]+", token) is not None and 0 <= int(token) <= 32767 # Don't use \d. In python, \d matches full-width charactors, too.
-
-    def _is_string_const(self, token: str) -> bool:
-        return token.isascii() and re.fullmatch(r'"[^"\r\n]*"', token) is not None
     
     def token_type(self) -> TokenType:
         self.token = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
 
-        if self.token in KEYWORD_SET:
+        if Keyword.is_keyword(self.token):
             return TokenType.KEYWORD
-        elif self.token in SYMBOL_SET:
+        elif Symbol.is_symbol(self.token):
             return TokenType.SYMBOL
         elif Identifier.is_identifier(self.token):
             return TokenType.IDENTIFIER
-        elif self._is_int_const(self.token):
+        elif IntConst.is_int_const(self.token):
             return TokenType.INT_CONST
-        elif self._is_string_const(self.token):
+        elif StringConst.is_string_const(self.token):
             return TokenType.STRING_CONST
         else:
             raise NotImplementedError(f"{self.token} is not recognized as Token")
