@@ -1,5 +1,5 @@
 from pathlib import Path
-from enum import Enum, auto, StrEnum
+from enum import auto, StrEnum
 import re
 
 class TOKEN_TYPE(StrEnum):
@@ -32,7 +32,7 @@ class KEYWORD(StrEnum):
     NULL = auto()
     THIS = auto()
 
-class SYMBOL(Enum):
+class SYMBOL(StrEnum):
     LEFT_BRACE = "{"
     RIGHT_BRACE = "}"
     LEFT_PAREN = "("
@@ -63,6 +63,7 @@ class JackTokenizer():
         self.piled_jack_chars = Path.read_text(input_path, "utf-8")
         self._token_start_idx = 0
         self._token_end_idx = 0
+        self.token = None
 
     def _is_idx_ltn_len(self, idx: int) -> bool:
         return idx < len(self.piled_jack_chars)
@@ -106,26 +107,26 @@ class JackTokenizer():
         return token.isascii() and re.fullmatch(r'"[^"\r\n]*"', token) is not None
     
     def token_type(self) -> TOKEN_TYPE:
-        token = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
+        self.token = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
 
-        if token in KEYWORD_SET:
+        if self.token in KEYWORD_SET:
             return TOKEN_TYPE.KEYWORD
-        elif token in SYMBOL_SET:
+        elif self.token in SYMBOL_SET:
             return TOKEN_TYPE.SYMBOL
-        elif self._is_identifier(token):
+        elif self._is_identifier(self.token):
             return TOKEN_TYPE.IDENTIFIER
-        elif self._is_int_const(token):
+        elif self._is_int_const(self.token):
             return TOKEN_TYPE.INT_CONST
-        elif self._is_string_const(token):
+        elif self._is_string_const(self.token):
             return TOKEN_TYPE.STRING_CONST
         else:
-            raise NotImplementedError(f"{token} is not recognized as Token")
+            raise NotImplementedError(f"{self.token} is not recognized as Token")
     
-    def keyword(self) -> KEYWORD:
-        raise NotImplementedError()
+    def keyword(self) -> KEYWORD | None:
+        return KEYWORD(self.token)
     
-    def symbol(self) -> str:
-        raise NotImplementedError()
+    def symbol(self) -> SYMBOL | None:
+        return SYMBOL(self.token)
 
     def identifier(self) -> str:
         raise NotImplementedError()

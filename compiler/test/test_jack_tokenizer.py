@@ -71,3 +71,28 @@ def test_token_type(make_tokenizer: Callable[[str], JackTokenizer], text: str, e
     jack_tokenizer = make_tokenizer(text)
     jack_tokenizer.advance()
     assert jack_tokenizer.token_type().value == expected
+
+@pytest.mark.parametrize(
+    ("text", "token",  "expected"),
+    [
+        ("do 1\n    while True", "keyword", "do"),
+    ]
+)
+def test_keyword_methods(make_tokenizer: Callable[[str], JackTokenizer], text: str, token: str, expected: str):
+    jack_tokenizer = make_tokenizer(text)
+    jack_tokenizer.advance()
+    assert jack_tokenizer.token_type().value == token
+    assert jack_tokenizer.keyword() == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "token",  "expected"),
+    [
+        (" \n   {a1_k}", "symbol", "{"),
+    ]
+)
+def test_symbol_methods(make_tokenizer: Callable[[str], JackTokenizer], text: str, token: str, expected: str):
+    jack_tokenizer = make_tokenizer(text)
+    jack_tokenizer.advance()
+    assert jack_tokenizer.token_type().value == token
+    assert jack_tokenizer.symbol() == expected
