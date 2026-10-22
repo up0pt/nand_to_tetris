@@ -96,3 +96,39 @@ def test_symbol_methods(make_tokenizer: Callable[[str], JackTokenizer], text: st
     jack_tokenizer.advance()
     assert jack_tokenizer.token_type().value == token
     assert jack_tokenizer.symbol() == expected
+
+@pytest.mark.parametrize(
+    ("text", "token",  "expected"),
+    [
+        (" \n\n _aW2u4()", "identifier", "_aW2u4"),
+    ]
+)
+def test_identifier_methods(make_tokenizer: Callable[[str], JackTokenizer], text: str, token: str, expected: str):
+    jack_tokenizer = make_tokenizer(text)
+    jack_tokenizer.advance()
+    assert jack_tokenizer.token_type().value == token
+    assert jack_tokenizer.identifier() == expected
+
+@pytest.mark.parametrize(
+    ("text", "token",  "expected"),
+    [
+        (" \n\n 3220 _aW2u4()", "int_const", "3220"),
+    ]
+)
+def test_int_const_methods(make_tokenizer: Callable[[str], JackTokenizer], text: str, token: str, expected: str):
+    jack_tokenizer = make_tokenizer(text)
+    jack_tokenizer.advance()
+    assert jack_tokenizer.token_type().value == token
+    assert jack_tokenizer.intval() == expected
+
+@pytest.mark.parametrize(
+    ("text", "token",  "expected"),
+    [
+        (' \n\n "Test_2329()*^&%@!"3220 _aW2u4() "None"', "string_const", '"Test_2329()*^&%@!"'),
+    ]
+)
+def test_string_const_methods(make_tokenizer: Callable[[str], JackTokenizer], text: str, token: str, expected: str):
+    jack_tokenizer = make_tokenizer(text)
+    jack_tokenizer.advance()
+    assert jack_tokenizer.token_type().value == token
+    assert jack_tokenizer.string_val() == expected

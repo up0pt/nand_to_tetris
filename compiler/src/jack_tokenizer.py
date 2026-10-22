@@ -112,12 +112,17 @@ class JackTokenizer():
         return start_idx
 
     def _skip_before_whitespace_or_comments(self, end_idx: int) -> int:
-        if Symbol.is_symbol(self.piled_jack_chars[end_idx]):
+        start_with = self.piled_jack_chars[end_idx]
+        if Symbol.is_symbol(start_with):
             return end_idx
         
         while self._is_idx_ltn_len(end_idx+1) and self.piled_jack_chars[end_idx+1] not in BLANK_SET:
-            if Symbol.is_symbol(self.piled_jack_chars[end_idx+1]):
+            if start_with != '"' and Symbol.is_symbol(self.piled_jack_chars[end_idx+1]):
                 return end_idx
+            
+            if start_with == '"' and self.piled_jack_chars[end_idx+1] == '"':
+                return end_idx + 1
+            
             end_idx += 1
         
         return end_idx
@@ -135,32 +140,44 @@ class JackTokenizer():
             self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
     
     def token_type(self) -> TokenType:
-        self.token = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
+        token_text = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
+        self._set_token(token_text)
 
-        if Keyword.is_keyword(self.token):
+        if Keyword.is_keyword(self._get_token()):
             return TokenType.KEYWORD
-        elif Symbol.is_symbol(self.token):
+        elif Symbol.is_symbol(self._get_token()):
             return TokenType.SYMBOL
-        elif Identifier.is_identifier(self.token):
+        elif Identifier.is_identifier(self._get_token()):
             return TokenType.IDENTIFIER
-        elif IntConst.is_int_const(self.token):
+        elif IntConst.is_int_const(self._get_token()):
             return TokenType.INT_CONST
-        elif StringConst.is_string_const(self.token):
+        elif StringConst.is_string_const(self._get_token()):
             return TokenType.STRING_CONST
         else:
-            raise NotImplementedError(f"{self.token} is not recognized as Token")
-    
-    def keyword(self) -> Keyword | None:
-        return Keyword(self.token)
-    
-    def symbol(self) -> Symbol | None:
-        return Symbol(self.token)
+            raise NotImplementedError(f"{self._get_token()} is not recognized as Token")
 
-    def identifier(self) -> str:
-        raise NotImplementedError()
-        
-    def intval(self) -> int:
-        raise NotImplementedError()
+    def _get_token(self) -> str:
+        token = self.token
+        if token is None:
+            raise RuntimeError(
+                "No current token. Call advance() successfully first."
+            )
+        return token
+
+    def _set_token(self, token: str) -> None:
+        self.token = token
     
-    def string_val(self) -> str:
-        raise NotImplementedError()
+    def keyword(self) -> Keyword:
+        return Keyword(self._get_token())
+    
+    def symbol(self) -> Symbol:
+        return Symbol(self._get_token())
+
+    def identifier(self) -> Identifier:
+        return Identifier(self._get_token())
+        
+    def intval(self) -> IntConst:
+        return IntConst(self._get_token())
+    
+    def string_val(self) -> StringConst:
+        return StringConst(self._get_token())
