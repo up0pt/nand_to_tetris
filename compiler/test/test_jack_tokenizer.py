@@ -159,4 +159,5 @@ def test_tokenize_long_input_withot_comments(make_tokenizer: Callable[[str], Jac
         jack_tokenizer.advance()
         print(jack_tokenizer.token)
         assert jack_tokenizer.token_type() == expected[idx][1]
+        assert jack_tokenizer.token == expected[idx][0]
         idx += 1
