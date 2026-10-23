@@ -99,7 +99,7 @@ class JackTokenizer():
         self.input_path = input_path
         self.piled_jack_chars = Path.read_text(input_path, "utf-8")
         self._token_start_idx = 0
-        self._token_end_idx = 0
+        self._token_end_idx = -1
         self.token = None
 
     def _is_idx_ltn_len(self, idx: int) -> bool:
@@ -131,12 +131,12 @@ class JackTokenizer():
         return (self._token_start_idx, self._token_end_idx)
 
     def has_more_token(self) -> bool:
-        start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
+        start_idx = self._skip_whitespace_and_comments(self._token_end_idx+1)
         return self._is_idx_ltn_len(start_idx)
         
     def advance(self) -> None:
         if self.has_more_token():
-            self._token_start_idx = self._skip_whitespace_and_comments(self._token_start_idx)
+            self._token_start_idx = self._skip_whitespace_and_comments(self._token_end_idx+1)
             self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
     
     def token_type(self) -> TokenType:

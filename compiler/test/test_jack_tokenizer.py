@@ -132,3 +132,31 @@ def test_string_const_methods(make_tokenizer: Callable[[str], JackTokenizer], te
     jack_tokenizer.advance()
     assert jack_tokenizer.token_type().value == token
     assert jack_tokenizer.string_val() == expected
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        (
+            ' \n\n "Test_2329()*^&%@!"3220 \n  _aW2u4({return}) "None"', 
+            [
+                ['"Test_2329()*^&%@!"', "string_const"],
+                ["3220", "int_const"],
+                ["_aW2u4", "identifier"],
+                ["(", "symbol"],
+                ["{", "symbol"],
+                ["return", "keyword"],
+                ["}", "symbol"],
+                [")", "symbol"],
+                ['"None"', "string_const"],
+            ]
+        ),
+    ]
+)
+def test_tokenize_long_input_withot_comments(make_tokenizer: Callable[[str], JackTokenizer], text: str, expected: list[list[str]]):
+    jack_tokenizer = make_tokenizer(text)
+    idx = 0
+    while jack_tokenizer.has_more_token():
+        jack_tokenizer.advance()
+        print(jack_tokenizer.token)
+        assert jack_tokenizer.token_type() == expected[idx][1]
+        idx += 1
