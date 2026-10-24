@@ -36,6 +36,7 @@ class CompilationEngine():
             compiled_xml_str += self.compile_class_var_dec()
 
         while self.jack_tokenizer.get_token() in ("constructor", "function", "method"):
+            raise NotImplementedError("Implement subroutine in progress")
             compiled_xml_str += self.compile_subroutine()
 
         right_brace = self.jack_tokenizer.symbol()
