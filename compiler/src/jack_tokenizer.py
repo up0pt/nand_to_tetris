@@ -139,10 +139,10 @@ class JackTokenizer:
         if self.has_more_token():
             self._token_start_idx = self._skip_whitespace_and_comments(self._token_end_idx+1)
             self._token_end_idx = self._skip_before_whitespace_or_comments(self._token_start_idx)
+            token_text = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
+            self._set_token(token_text)
     
     def token_type(self) -> TokenType:
-        token_text = self.piled_jack_chars[self._token_start_idx : self._token_end_idx+1]
-        self._set_token(token_text)
 
         if Keyword.is_keyword(self._get_token()):
             return TokenType.KEYWORD
