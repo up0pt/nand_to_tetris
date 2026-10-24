@@ -15,26 +15,43 @@ class CompilationEngine():
         raise NotImplementedError()
     
     def compile_class(self) -> None:
+        compiled_xml_str = ""
         self.jack_tokenizer.advance()
-        keyword = self.jack_tokenizer.keyword()
+
+        keyword = self.jack_tokenizer.keyword() #TODO:　そもそもkeywordでない場合のエラー
+        if keyword != "class":
+            raise SyntaxError(f'Expected "class" but got "{keyword}"')
+        compiled_xml_str += "<class>\n    <keyword> class </keyword>\n"
         self.jack_tokenizer.advance()
-        identifier = self.jack_tokenizer.identifier()
 
+        identifier = self.jack_tokenizer.identifier() #TODO:　そもそもidentifierでない場合のエラー
+        compiled_xml_str += f"    <identifier> {identifier} </identifier>\n"
+        self.jack_tokenizer.advance()
 
-        self.output_path.write_text(
-            dedent(
-            f"""\
-                <class>
-                    <keyword> {keyword} </keyword>
-                    <identifier> {identifier} </identifier>
-                </class>"""), "utf-8"
-            )
+        left_brace = self.jack_tokenizer.symbol()
+        compiled_xml_str += f"    <symbol> {left_brace} </symbol>\n"
+        self.jack_tokenizer.advance()
 
-    def compile_class_var_dec(self) -> None:
-        raise NotImplementedError()
+        while self.jack_tokenizer.get_token() in ("static", "field"):
+            compiled_xml_str += self.compile_class_var_dec()
+            self.jack_tokenizer.advance()
 
-    def compile_subroutine(self) -> None:
-        raise NotImplementedError()
+        while self.jack_tokenizer.get_token() in ("constructor", "function", "method"):
+            compiled_xml_str += self.compile_subroutine()
+            self.jack_tokenizer.advance()
+
+        right_brace = self.jack_tokenizer.symbol()
+        compiled_xml_str += f"    <symbol> {right_brace} </symbol>\n"
+        self.jack_tokenizer.advance()
+        
+        compiled_xml_str += "</class>"
+        self.output_path.write_text(compiled_xml_str, "utf-8")
+
+    def compile_class_var_dec(self) -> str:
+        return ""
+
+    def compile_subroutine(self) -> str:
+        return ""
 
     def compile_parameter_list(self) -> None:
         raise NotImplementedError()

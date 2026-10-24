@@ -23,15 +23,17 @@ def make_compilation_engine(tmp_path: Path) -> Callable[[str], tuple[Compilation
         ("text", "expected"),
         [
             (
-                "  \n class  abc\n\n", 
+                "  \n class  abc\n\n {}", 
                 dedent("""\
                     <class>
                         <keyword> class </keyword>
                         <identifier> abc </identifier>
+                        <symbol> { </symbol>
+                        <symbol> } </symbol>
                     </class>"""))
         ]
 )
-def test_compile_class(text: str, expected: str, make_compilation_engine: Callable[[str], tuple[CompilationEngine, Path]]):
+def test_compile_class_plain_all(text: str, expected: str, make_compilation_engine: Callable[[str], tuple[CompilationEngine, Path]]):
     compilation_engine, output_path = make_compilation_engine(text)
     compilation_engine.compile_class()
     assert output_path.read_text("utf-8") == expected
