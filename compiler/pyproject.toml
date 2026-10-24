@@ -14,3 +14,6 @@ JackAnalyzer= "jack_analyzer:main"
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["test"]
+
+[tool.ruff]
+src = ["src"]
