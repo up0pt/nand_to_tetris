@@ -1,4 +1,5 @@
 from pathlib import Path
+from textwrap import dedent
 
 from jack_tokenizer import JackTokenizer
 
@@ -14,7 +15,20 @@ class CompilationEngine():
         raise NotImplementedError()
     
     def compile_class(self) -> None:
-        raise NotImplementedError()
+        self.jack_tokenizer.advance()
+        keyword = self.jack_tokenizer.keyword()
+        self.jack_tokenizer.advance()
+        identifier = self.jack_tokenizer.identifier()
+
+
+        self.output_path.write_text(
+            dedent(
+            f"""\
+                <class>
+                    <keyword> {keyword} </keyword>
+                    <identifier> {identifier} </identifier>
+                </class>"""), "utf-8"
+            )
 
     def compile_class_var_dec(self) -> None:
         raise NotImplementedError()
