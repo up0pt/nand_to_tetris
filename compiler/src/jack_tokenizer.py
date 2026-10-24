@@ -144,20 +144,20 @@ class JackTokenizer:
     
     def token_type(self) -> TokenType:
 
-        if Keyword.is_keyword(self._get_token()):
+        if Keyword.is_keyword(self.get_token()):
             return TokenType.KEYWORD
-        elif Symbol.is_symbol(self._get_token()):
+        elif Symbol.is_symbol(self.get_token()):
             return TokenType.SYMBOL
-        elif Identifier.is_identifier(self._get_token()):
+        elif Identifier.is_identifier(self.get_token()):
             return TokenType.IDENTIFIER
-        elif IntConst.is_int_const(self._get_token()):
+        elif IntConst.is_int_const(self.get_token()):
             return TokenType.INT_CONST
-        elif StringConst.is_string_const(self._get_token()):
+        elif StringConst.is_string_const(self.get_token()):
             return TokenType.STRING_CONST
         else:
-            raise NotImplementedError(f"{self._get_token()} is not recognized as Token")
+            raise NotImplementedError(f"{self.get_token()} is not recognized as Token")
 
-    def _get_token(self) -> str:
+    def get_token(self) -> str:
         token = self.token
         if token is None:
             raise RuntimeError(
@@ -169,16 +169,16 @@ class JackTokenizer:
         self.token = token
     
     def keyword(self) -> Keyword:
-        return Keyword(self._get_token())
+        return Keyword(self.get_token())
     
     def symbol(self) -> Symbol:
-        return Symbol(self._get_token())
+        return Symbol(self.get_token())
 
     def identifier(self) -> Identifier:
-        return Identifier(self._get_token())
+        return Identifier(self.get_token())
         
     def intval(self) -> IntConst:
-        return IntConst(self._get_token())
+        return IntConst(self.get_token())
     
     def string_val(self) -> StringConst:
-        return StringConst(self._get_token())
+        return StringConst(self.get_token())
