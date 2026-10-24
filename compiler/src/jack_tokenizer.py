@@ -1,6 +1,7 @@
 from pathlib import Path
 from enum import auto, StrEnum
 import re
+from typing import Self
 
 class TokenType(StrEnum):
     KEYWORD = auto()
@@ -62,7 +63,7 @@ class Symbol(StrEnum):
         return text in {symbol.value for symbol in Symbol}
 
 class Identifier(str):
-    def __new__(cls, text: str) -> "Identifier":
+    def __new__(cls, text: str) -> Self:
         if not Identifier.is_identifier(text):
             raise ValueError(f"Invalid identifier: {text!r}")
         return super().__new__(cls, text)
@@ -72,7 +73,7 @@ class Identifier(str):
         return re.fullmatch(r"[a-zA-Z_][a-zA-Z0-9_]*", text) is not None
 
 class IntConst(str):
-    def __new__(cls, text: str) -> "IntConst":
+    def __new__(cls, text: str) -> Self:
         if not IntConst.is_int_const(text):
             raise ValueError(f"Invalid identifier: {text!r}")
         return super().__new__(cls, text)
@@ -82,7 +83,7 @@ class IntConst(str):
         return re.fullmatch(r"[0-9]+", text) is not None and 0 <= int(text) <= 32767 # Don't use r"\d+". In python, \d matches full-width charactors, too.
 
 class StringConst(str):
-    def __new__(cls, text: str) -> "StringConst":
+    def __new__(cls, text: str) -> Self:
         if not StringConst.is_string_const(text):
             raise ValueError(f"Invalid StringConst: {text!r}")
 
@@ -94,7 +95,7 @@ class StringConst(str):
 
 BLANK_SET = {" ", "\n", "\t"}
 
-class JackTokenizer():
+class JackTokenizer:
     def __init__(self, input_path: Path) -> None:
         self.input_path = input_path
         self.piled_jack_chars = Path.read_text(input_path, "utf-8")
